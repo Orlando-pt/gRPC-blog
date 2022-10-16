@@ -1,0 +1,4 @@
+grpcio==1.49.1
+grpcio-tools==1.49.1
+pymongo[srv]==4.2.0
+essential-generators==1.0
