@@ -19,7 +19,7 @@ class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
     def __init__(self):
         self.db = blog_resources.get_database()
 
-    def CreateBlog(self, request, context):
+    def CreateBlog(self, request, context) -> blog_pb2.Blog:
         author = request.author
         if author == "":
             msg = '`Author` cannot be empty'
@@ -54,7 +54,7 @@ class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
             context.set_code(grpc.StatusCode.ABORTED)
             return blog_pb2.Blog()
 
-    def GetBlogInfo(self, request, context):
+    def GetBlogInfo(self, request, context) -> blog_pb2.Blog:
         id = request.id
         if id == "":
             msg = '`id` cannot be empty'
@@ -79,7 +79,7 @@ class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
             context.set_code(grpc.StatusCode.ABORTED)
             return blog_pb2.Blog()
 
-    def CreateBlogPost(self, request, context):
+    def CreateBlogPost(self, request, context) -> blog_pb2.BlogPost:
         blog_id = request.blog_id
         if blog_id == "":
             msg = '`blog_id` cannot be empty'
@@ -136,7 +136,7 @@ class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
             context.set_code(grpc.StatusCode.ABORTED)
             return blog_pb2.Blog()
 
-    def RecordQuotes(self, request_iterator, context):
+    def RecordQuotes(self, request_iterator, context) -> blog_pb2.QuoteSummary:
         quotes = []
 
         for quote in request_iterator:

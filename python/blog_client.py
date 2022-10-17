@@ -1,16 +1,3 @@
-# Copyright 2015 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 """The Python implementation of the gRPC route guide client."""
 
 from __future__ import print_function
@@ -31,7 +18,7 @@ gen = DocumentGenerator()
 
 
 def create_blogs(stub: blog_pb2_grpc.BlogServiceStub) -> List[str]:
-    blog_ids = []
+    blog_ids: List[str] = []
     for _ in range(3):
         blog_creation = blog_pb2.BlogCreation(
             author=gen.name(), name=gen.sentence())
@@ -54,7 +41,7 @@ def get_blog_info(stub: blog_pb2_grpc.BlogServiceStub, blog_ids: List[str]):
 
 
 def create_blog_posts(stub: blog_pb2_grpc.BlogServiceStub, blog_ids: List[str]) -> List[str]:
-    posts_ids = []
+    posts_ids: List[str] = []
     for id in blog_ids:
         blog_post_creation = blog_pb2.BlogPostCreation(
             blog_id=id, post_title=gen.sentence(), post_content=gen.paragraph(min_sentences=3))
@@ -67,7 +54,7 @@ def create_blog_posts(stub: blog_pb2_grpc.BlogServiceStub, blog_ids: List[str]) 
 
 
 def get_blog_posts(stub: blog_pb2_grpc.BlogServiceStub, blog_ids: List[str]) -> List[Tuple[str, str]]:
-    posts_id_content = []
+    posts_id_content: List[Tuple[str, str]] = []
     for id in blog_ids:
         blog_id = blog_pb2.BlogId(id=id)
         print("\nAsking for Blog Posts of Blog with id %s" % (id))

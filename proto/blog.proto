@@ -12,23 +12,20 @@ service BlogService {
 
   // A simple RPC.
   //
-  // Creates a Blog (with auth TODO)
+  // Creates a Blog
   //
-  // An error should be provided if not possible (TODO).
   rpc CreateBlog(BlogCreation) returns (Blog);
 
   // A simple RPC.
   //
   // Gets Blog Info given it's id
   //
-  // An error should be provided if blog not found.
   rpc GetBlogInfo(BlogId) returns (Blog);
 
   // A simple RPC.
   //
-  // Creates a Blog Post given it's Blog id and Blog Post (with auth TODO)
+  // Creates a Blog Post given it's Blog id and Blog Post
   //
-  // An error should be provided if Blog Post was not created..
   rpc CreateBlogPost(BlogPostCreation) returns (BlogPost);
 
   // A server-to-client streaming RPC.
