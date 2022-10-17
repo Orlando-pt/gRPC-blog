@@ -106,4 +106,4 @@ def get_comments_cursor(client: MongoClient, post_id: str) -> pymongo.CursorType
     collection = client[f"blog_post_{post_id}_comments"]
 
     return collection.find({"created_at": {
-        "$gt": datetime.datetime.utcnow()}}, tailable=True)
+        "$gt": datetime.datetime.utcnow()}})

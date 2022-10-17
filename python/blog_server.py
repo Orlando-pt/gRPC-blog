@@ -2,7 +2,7 @@
 
 from concurrent import futures
 import logging
-import time
+from turtle import pos
 from typing import List, Tuple
 
 import grpc
@@ -10,6 +10,7 @@ import pymongo
 import blog_pb2
 import blog_pb2_grpc
 import blog_resources
+from google.protobuf.timestamp_pb2 import Timestamp
 
 
 class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
@@ -153,7 +154,9 @@ class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
 
         for comment in request_iterator:
             if post_id:
-                self.getAndSendNewComments(cursor, post_id)
+                cursor, comments = self.getAndSendNewComments(cursor, post_id)
+                for comm in comments:
+                    yield comm
 
             if comment.blog_post_id == "" or comment.author == "" or comment.content == "":
                 msg = 'Invalid Comment received'
@@ -176,25 +179,28 @@ class BlogServiceServicer(blog_pb2_grpc.BlogServiceServicer):
                 return blog_pb2.Comment()
 
             if post_id:
-                self.getAndSendNewComments(cursor, post_id)
+                cursor, comments = self.getAndSendNewComments(cursor, post_id)
+                for comm in comments:
+                    yield comm
 
-    def getAndSendNewComments(self, cursor: pymongo.CursorType, post_id: str) -> pymongo.CursorType:
-        if cursor and not cursor.alive:
+    def getAndSendNewComments(self, cursor: pymongo.CursorType, post_id: str) -> Tuple[pymongo.CursorType, List[str]]:
+        comments = []
+        if not cursor or not cursor.alive:
             cursor = blog_resources.get_comments_cursor(self.db, post_id)
-        while True:
-            if cursor.alive:
+        if cursor and cursor.alive:
+            while True:   
                 try:
                     doc = cursor.next()
-                    yield blog_pb2.Comment(
+                    comments.append(blog_pb2.Comment(
                         blog_post_id=post_id,
-                        author=doc.author,
-                        content=doc.content,
-                        created_at=doc.created_at
-                        # TODO Fix this created_at and change to Timestamp from google
-                    )
+                        author=doc["author"],
+                        content=doc["content"],
+                        created_at=Timestamp(seconds=int(doc["created_at"].timestamp()))
+                    ))      
                 except StopIteration:
                     break
-        return cursor
+
+        return cursor, comments
 
 
 def serve():
