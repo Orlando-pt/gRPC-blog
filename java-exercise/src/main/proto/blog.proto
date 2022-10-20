@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+option java_package = "pt.up.blog";
+option java_outer_classname = "BlogGRPC";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+package blog;
+
+service BlogService {
+
+  // A simple RPC.
+  //
+  // Creates a Blog
+  //
+  rpc CreateBlog(BlogCreation) returns (Blog);
+
+  // A simple RPC.
+  //
+  // Gets Blog Info given it's id
+  //
+  rpc GetBlogInfo(BlogId) returns (Blog);
+
+  // A simple RPC.
+  //
+  // Creates a Blog Post given it's Blog id and Blog Post
+  //
+  rpc CreateBlogPost(BlogPostCreation) returns (BlogPost);
+
+  // A server-to-client streaming RPC.
+  //
+  // Obtains the Blog Posts avaialble for a given Blog.  Results are
+  // streamed rather than returned at once (e.g. in a response message with a
+  // repeated field), as the Blog may have a large number of posts.
+  rpc GetBlogPosts(BlogId) returns (stream BlogPost);
+
+  // A client-to-server streaming RPC.
+  //
+  // Accepts a stream of quotes while a blog post is being traversed, returning a
+  // QuoteSummary when traversal is completed.
+  rpc RecordQuotes(stream Quote) returns (QuoteSummary) {}
+
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of comments sent while a Blog Post is being read,
+  // while receiving other comments (e.g. from other users).
+  rpc BlogPostChat(stream Comment) returns (stream Comment) {}
+
+}
+
+message Blog{
+  string id = 1;
+  string author = 2;
+  string name = 3;
+}
+
+message BlogCreation{
+  string author = 1;
+  string name = 2;
+}
+
+message BlogPostCreation{
+  string blog_id = 1;
+  string post_title = 2;
+  string post_content = 3;
+}
+
+message BlogPost{
+  string id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+message Comment{
+  string blog_post_id = 1;
+  string author = 2;
+  string content = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message Quote{
+  string content = 1;
+  string blog_post_id = 2;
+
+}
+
+message QuoteSummary{
+  int32 quote_count = 1;
+  int32 posts_count = 2;
+  repeated Quote quotes = 3;
+}
+
+message BlogId {
+  string id = 1;
+}
