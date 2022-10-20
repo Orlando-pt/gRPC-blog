@@ -13,7 +13,7 @@ import blog_pb2
 
 def get_database():
     # Provide the mongodb url to connect python to mongodb using pymongo
-    CONNECTION_STRING = "mongodb://root:root@localhost/"
+    CONNECTION_STRING = "mongodb://root:root@mongo/"
 
     # Create a connection using MongoClient
     client = MongoClient(CONNECTION_STRING)
