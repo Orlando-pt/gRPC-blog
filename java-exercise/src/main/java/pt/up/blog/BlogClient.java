@@ -17,7 +17,7 @@ public class BlogClient {
 
     /**
      * It is highly recommended to complete this exercise
-     * having has support the following tutorial, please read it and have fun!
+     * having as support the following tutorial. Please read it and have fun!
      * https://grpc.io/docs/languages/java/basics/
      */
     private final BlogServiceGrpc.BlogServiceBlockingStub blockingStub;
