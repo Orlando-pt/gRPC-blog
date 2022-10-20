@@ -21,14 +21,14 @@ public class BlogClient {
      * https://grpc.io/docs/languages/java/basics/
      */
     private final BlogServiceGrpc.BlogServiceBlockingStub blockingStub;
-    // TODO
-//    private final BlogServiceGrpc.BlogServiceStub asyncStub;
+    // TODO 2.1
+    //    private final BlogServiceGrpc.BlogServiceStub asyncStub;
     private static final Logger logger = Logger.getLogger(BlogClient.class.getName());
     public BlogClient(Channel channel) {
         // create blocking stub
         blockingStub = BlogServiceGrpc.newBlockingStub(channel);
-        // TODO create asynchronous stub
-//        asyncStub =
+        // TODO 2.2 create asynchronous stub
+        //        asyncStub =
     }
 
     /**
@@ -81,7 +81,7 @@ public class BlogClient {
         }
     }
 
-    /**
+    /** Exercise 0
      * Creates posts on a specific blog
      * @param blogIds list with blog ids
      * @return list with the ids of posts created
@@ -118,7 +118,7 @@ public class BlogClient {
         return postsIds;
     }
 
-    /**
+    /** Exercise 1
      * Retrieves a stream of blog posts
      * @param blogIds list with blog ids
      * @return list with post ids
@@ -127,22 +127,22 @@ public class BlogClient {
         List<String> postsIds = new ArrayList<>();
 
         /**
-         * TODO 1
+         * TODO 1.0
          * This method allows to contact a service in which the server
          * sends a stream of messages.
          * In the next lines develop the necessary code to retrieve
          * the stream from the server.
          */
-        // TODO 1 Here create a reference to Iterate through the received blog posts
+        // TODO 1.1 Here create a reference to Iterate through the received blog posts
         // Like the following one Iterator<String> aStringIterator
         // ? blogPostResponseIterator
         BlogPost blogPost;
 
         for (String id: blogIds) {
-            // TODO 1 Add the appropriate information inside the next method call
-//            blogPostResponseIterator = blockingStub.getBlogPosts();
+            // TODO 1.2 Add the appropriate information inside the next method call
+            // blogPostResponseIterator = blockingStub.getBlogPosts();
 
-            // TODO 2 When the tasks above are completed uncomment the next block of code
+            // TODO 1.3 When the tasks above are completed uncomment the next block of code
             /**
             while (blogPostResponseIterator.hasNext()) {
                 blogPost = blogPostResponseIterator.next();
@@ -163,7 +163,7 @@ public class BlogClient {
         return postsIds;
     }
 
-    /**
+    /** Exercise 2
      * Sends a stream of Quotes
      * @param postIds lists of post ids
      * @throws InterruptedException
@@ -205,10 +205,10 @@ public class BlogClient {
         };
 
         /**
-         * TODO 3 This is an asynchronous call so please go to the constructor
+         * TODO 2 This is an asynchronous call so please go to the constructor
          * of this class and create an async stub
          */
-//        StreamObserver<Quote> requestObserver = asyncStub.recordQuotes(responseObserver);
+        // StreamObserver<Quote> requestObserver = asyncStub.recordQuotes(responseObserver); 
 
         Quote quote;
         Random rand = new Random();
@@ -216,13 +216,13 @@ public class BlogClient {
 
             for(String id: postIds) {
                 /**
-                 * TODO 3 Build quotes and send them to the server. Just build, the send we already took care of below ;)
+                 * TODO 2.3 Build quotes and send them to the server. Just build, the send we already took care of below ;)
                  * The server will be waiting for quotes
                  * until the client calls the onCompleted() method
                  */
-//                quote = Quote.newBuilder()
+                // quote = Quote.newBuilder()
 
-                // TODO 3 When the tasks above are completed uncomment the next block of code
+                // TODO 2.4 When the tasks above are completed uncomment the next block of code
                 /**
                 logger.info(String.format(
                         "Sending quote %s of post %s",
@@ -243,18 +243,18 @@ public class BlogClient {
                 }
             }
         } catch (RuntimeException e) {
-            // TODO 3 also to uncomment
-//            requestObserver.onError(e);
+            // TODO 2.5 to uncomment because it would give compile error without his definition with async
+            // requestObserver.onError(e);
             throw e;
         }
 
-        // TODO you already know what to do
-//        requestObserver.onCompleted();
+        // TODO 2.6 you already know what to do
+        //requestObserver.onCompleted();
 
         finishLatch.await(1, TimeUnit.MINUTES);
     }
 
-    /**
+    /** Exercise 3
      * Simulates a chat where client and server send each other
      * messages continuously
      * @param postId a list of post ids
@@ -265,12 +265,12 @@ public class BlogClient {
 
 
         /**
-         * TODO 4 For the next line to work it needs a response observer that is triggered each time the
+         * TODO 3.1 For the next line to work it needs a response observer that is triggered each time the
          * server sends back a comment
          *
          * Implement the appropriate observer and add him into the method call
          */
-//        StreamObserver<Comment> requestObserver = asyncStub.blogPostChat(The observer is going to be here);
+        // StreamObserver<Comment> requestObserver = asyncStub.blogPostChat(The observer is going to be here);
 
         Comment comment;
         Random rand = new Random();
@@ -288,20 +288,20 @@ public class BlogClient {
                         comment.getAuthor()
                 ));
 
-                // TODO 4 uncomment
-//                requestObserver.onNext(comment);
+                // TODO 3.2 uncomment
+                // requestObserver.onNext(comment);
 
                 // Sleep for a bit before sending the next one.
                 Thread.sleep(rand.nextInt(1000) + 500);
             }
         } catch (RuntimeException e) {
-            // TODO 4 uncomment
-//            requestObserver.onError(e);
+            // TODO 3.3 uncomment
+            // requestObserver.onError(e);
             throw e;
         }
 
-        // TODO 4 and uncomment one last time
-//        requestObserver.onCompleted();
+        // TODO 3.4 and uncomment one last time
+        // requestObserver.onCompleted();
 
         finishLatch.await(1, TimeUnit.MINUTES);
     }
@@ -334,19 +334,19 @@ public class BlogClient {
             System.out.println("-------------- GetBlogInfo --------------");
             client.getBlogInfo(blogIds);
 
-            // TODO 1 uncomment
+            // TODO 0.1 uncomment
 //            System.out.println("-------------- CreateBlogPost --------------");
 //            List<String> postIds = client.createBlogPosts(blogIds);
 
-            // TODO 2 uncomment
+            // TODO 1.4 uncomment
 //            System.out.println("-------------- GetBlogPosts --------------");
 //            client.getBlogPosts(blogIds);
 
-            // TODO 3 uncomment
+            // TODO 2.7 uncomment
 //            System.out.println("-------------- RecordQuotes --------------");
 //            client.recordQuotesFromPosts(postIds);
 
-            // TODO 4 uncomment
+            // TODO 3.4 uncomment
 //            System.out.println("-------------- BlogPostChat --------------");
 //            Random rand = new Random();
 //            client.sendBlogPostCommentsToChat(postIds.get(rand.nextInt(postIds.size())));

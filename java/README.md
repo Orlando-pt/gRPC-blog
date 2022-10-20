@@ -3,12 +3,14 @@ gRPC Example
 
 ## <a name="to-build-the-examples"></a> To build the example
 
-1. From the main directory:
+1. Compile the .proto file using the gRPC compiler to generate Java code both for Client and Serve:
 ```
 $ ./gradlew installDist
 ```
 
-This creates the script `blog-client` in the
+It generates the code that includes the stubs and data classes at `build/generated/`.
+
+This also creates the script `blog-client` in the
 `build/install/blog/bin/` directory that runs the blog client. The
 blog requires the server to be running.
 
